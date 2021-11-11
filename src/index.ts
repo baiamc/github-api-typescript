@@ -1,4 +1,12 @@
+import fetch from 'node-fetch';
 
-console.log('Hello World!');
+const body = {a:1};
+const response = await fetch('https://httpbin.org/post', {
+  method: 'post',
+  body: JSON.stringify(body),
+  headers: {'Content-Type': 'application/json'}
+});
 
-console.log('Testing');
+const data = await response.json();
+console.log(data);
+console.log('done');
