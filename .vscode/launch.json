@@ -11,10 +11,10 @@
       "skipFiles": [
         "<node_internals>/**"
       ],
-      "program": "dest/index.js",
+      "program": "${workspaceFolder}/src/index.ts",
       "preLaunchTask": "tsc: build - tsconfig.json",
       "outFiles": [
-        "dest/**/*.js",
+        "${workspaceFolder}/dest/**/*.js",
         "!**/node_modules/**"
       ]
     }
