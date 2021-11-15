@@ -1,6 +1,6 @@
 import Config from "../config.js";
 import Secrets from "../secrets.js";
-import fetch from "node-fetch";
+import fetch, { RequestInit } from "node-fetch";
 import { PullRequestJson, RepoJson } from "./types.js";
 import PullRequest from "./pullRequest.js";
 
@@ -12,16 +12,19 @@ export default class GithubRepository {
     // No body necessary
   }
 
-  public get basicAuthHeader(): string {
-    return `token ${this._secrets.accessToken}`;
+  private apiHeaders() {
+    return {
+      "Content-Type": "application/vnd.github.v3+json",
+      Authorization: `token ${this._secrets.accessToken}`,
+    };
   }
 
-  private get orgEndpoint() {
+  private orgEndpoint() {
     return `${this._config.apiBase}/orgs/${this._config.organization}`;
   }
 
-  private get repoEndpoint() {
-    return `${this.orgEndpoint}/repos`;
+  private repoEndpoint() {
+    return `${this.orgEndpoint()}/repos`;
   }
 
   private prEndpoint(repo: string, number?: number) {
@@ -31,14 +34,18 @@ export default class GithubRepository {
   }
 
   private async getRepos(): Promise<RepoJson[]> {
-    return await this.getList(this.repoEndpoint);
+    return this.getList(this.repoEndpoint());
   }
 
+  /**
+   * Method to retrieve all pull requests for the configured organization
+   * @returns Array of pull requests for the configured organization
+   */
   public async getPullRequests(): Promise<PullRequest[]> {
     const pullRequests: PullRequest[] = [];
     const repos = await this.getRepos();
     for (const repo of repos) {
-      var prList = await this.getList<PullRequestJson>(
+      let prList = await this.getList<PullRequestJson>(
         this.prEndpoint(repo.name)
       );
       for (const pr of prList) {
@@ -52,15 +59,13 @@ export default class GithubRepository {
     let page = 1;
     const list: Type[] = [];
     const urlHasParams = url.indexOf("?") > -1;
+    // API only returns a subset of results, so keep grabbing more pages until we have it all
     while (true) {
       const response = await fetch(
         url + (urlHasParams ? "&page=" : "?page=") + page,
         {
           method: "get",
-          headers: {
-            "Content-Type": "application/vnd.github.v3+json",
-            Authorization: this.basicAuthHeader,
-          },
+          headers: this.apiHeaders(),
         }
       );
       if (response.status !== 200) {
@@ -69,6 +74,7 @@ export default class GithubRepository {
         );
       }
       const jsonData = <Type[]>await response.json();
+      // If no data is returned, then we've pulled all the pages
       if (jsonData.length === 0) {
         break;
       }
