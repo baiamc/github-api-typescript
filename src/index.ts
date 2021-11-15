@@ -1,7 +1,7 @@
 import fetch from "node-fetch";
-import Config from "./Config.js";
-import GithubRepository from "./GithubRepository.js";
-import Secrets from "./Secrets.js";
+import Config from "./config.js";
+import GithubRepository from "./githubRepository.js";
+import Secrets from "./secrets.js";
 
 const body = { a: 1 };
 const response = await fetch("https://httpbin.org/post", {

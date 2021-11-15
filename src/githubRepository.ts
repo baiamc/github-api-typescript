@@ -1,5 +1,5 @@
-import Config from "./Config.js";
-import Secrets from "./Secrets.js";
+import Config from "./config.js";
+import Secrets from "./secrets.js";
 import fetch from "node-fetch";
 import { IPullRequest, IRepo } from "./github/types.js";
 
