@@ -53,7 +53,7 @@ export default class GithubRepository {
     const list: Type[] = [];
     const urlHasParams = url.indexOf("?") > -1;
     while (true) {
-      const data = await fetch(
+      const response = await fetch(
         url + (urlHasParams ? "&page=" : "?page=") + page,
         {
           method: "get",
@@ -63,7 +63,12 @@ export default class GithubRepository {
           },
         }
       );
-      const jsonData = <Type[]>await data.json();
+      if (response.status !== 200) {
+        throw new Error(
+          `HTTP Error ${response.status}: ${response.statusText}`
+        );
+      }
+      const jsonData = <Type[]>await response.json();
       if (jsonData.length === 0) {
         break;
       }
