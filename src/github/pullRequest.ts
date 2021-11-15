@@ -9,41 +9,49 @@ export default class PullRequest {
     this.state = data.state;
     this.locked = data.locked;
     this.title = data.title;
-    this.createdAt = new Date(data.created_at);
-    this.updatedAt = new Date(data.updated_at);
-    this.mergedAt = new Date(data.merged_at);
-    this.closedAt = new Date(data.closed_at);
+    if (data.created_at) {
+      this.createdAt = new Date(data.created_at);
+    }
+    if (data.updated_at) {
+      this.updatedAt = new Date(data.updated_at);
+    }
+    if (data.merged_at) {
+      this.mergedAt = new Date(data.merged_at);
+    }
+    if (data.closed_at) {
+      this.closedAt = new Date(data.closed_at);
+    }
   }
 
   private _number: number;
-  public get number() {
+  public get number(): number {
     return this._number;
   }
-  private set number(v) {
+  private set number(v: number) {
     this._number = v;
   }
 
   private _state: PrState;
-  public get state() {
+  public get state(): PrState {
     return this._state;
   }
-  private set state(v) {
+  private set state(v: PrState) {
     this._state = v;
   }
 
   private _locked: boolean;
-  public get locked() {
+  public get locked(): boolean {
     return this._locked;
   }
-  private set locked(v) {
+  private set locked(v: boolean) {
     this._locked = v;
   }
 
   private _title: string;
-  public get title() {
+  public get title(): string {
     return this._title;
   }
-  private set title(v) {
+  private set title(v: string) {
     this._title = v;
   }
 
