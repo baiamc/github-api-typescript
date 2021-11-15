@@ -1,12 +1,20 @@
-import fetch from 'node-fetch';
+import fetch from "node-fetch";
+import Config from "./Config.js";
+import GithubRepository from "./GithubRepository.js";
+import Secrets from "./Secrets.js"
 
 const body = {a:1};
-const response = await fetch('https://httpbin.org/post', {
-  method: 'post',
+const response = await fetch("https://httpbin.org/post", {
+  method: "post",
   body: JSON.stringify(body),
-  headers: {'Content-Type': 'application/json'}
+  headers: {"Content-Type": "application/json"}
 });
 
-const data = await response.json();
-console.log(data);
-console.log('done');
+const secrets = await new Secrets().initialize();
+const config = await new Config().initialize();
+const repository = new GithubRepository(secrets, config);
+
+const pullRequests = await repository.getPullRequests();
+console.log(pullRequests);
+
+console.log("Done");
