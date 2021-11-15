@@ -1,7 +1,8 @@
 import Config from "../config.js";
 import Secrets from "../secrets.js";
 import fetch from "node-fetch";
-import { IPullRequest, IRepo } from "./types.js";
+import { PullRequestJson, RepoJson } from "./types.js";
+import PullRequest from "./pullRequest.js";
 
 export default class GithubRepository {
   constructor(
@@ -29,16 +30,20 @@ export default class GithubRepository {
     }/${repo}/pulls${number ? "/" + number : ""}?state=all`;
   }
 
-  public async getRepos(): Promise<IRepo[]> {
+  private async getRepos(): Promise<RepoJson[]> {
     return await this.getList(this.repoEndpoint);
   }
 
-  public async getPullRequests(): Promise<IPullRequest[]> {
-    const pullRequests: IPullRequest[] = [];
+  public async getPullRequests(): Promise<PullRequest[]> {
+    const pullRequests: PullRequest[] = [];
     const repos = await this.getRepos();
     for (const repo of repos) {
-      var prList = await this.getList<IPullRequest>(this.prEndpoint(repo.name));
-      pullRequests.push.apply(pullRequests, prList);
+      var prList = await this.getList<PullRequestJson>(
+        this.prEndpoint(repo.name)
+      );
+      for (const pr of prList) {
+        pullRequests.push(new PullRequest(pr));
+      }
     }
     return pullRequests;
   }
@@ -62,7 +67,7 @@ export default class GithubRepository {
       if (jsonData.length === 0) {
         break;
       }
-      list.push.apply(list, jsonData);
+      list.push(...jsonData);
       page += 1;
     }
     return list;

@@ -1,10 +1,16 @@
-export interface IPullRequest {
+export type PullRequestJson = {
   number: number;
-  state: string;
+  state: PrState;
   locked: boolean;
   title: string;
-}
+  created_at: string;
+  updated_at: string;
+  closed_at: string;
+  merged_at: string;
+};
 
-export interface IRepo {
+export type RepoJson = {
   name: string;
-}
+};
+
+export type PrState = "open" | "closed";
