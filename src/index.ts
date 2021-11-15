@@ -1,13 +1,13 @@
 import fetch from "node-fetch";
 import Config from "./Config.js";
 import GithubRepository from "./GithubRepository.js";
-import Secrets from "./Secrets.js"
+import Secrets from "./Secrets.js";
 
-const body = {a:1};
+const body = { a: 1 };
 const response = await fetch("https://httpbin.org/post", {
   method: "post",
   body: JSON.stringify(body),
-  headers: {"Content-Type": "application/json"}
+  headers: { "Content-Type": "application/json" },
 });
 
 const secrets = await new Secrets().initialize();
