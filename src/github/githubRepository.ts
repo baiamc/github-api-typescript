@@ -1,7 +1,7 @@
-import Config from "./config.js";
-import Secrets from "./secrets.js";
+import Config from "../config.js";
+import Secrets from "../secrets.js";
 import fetch from "node-fetch";
-import { IPullRequest, IRepo } from "./github/types.js";
+import { IPullRequest, IRepo } from "./types.js";
 
 export default class GithubRepository {
   constructor(

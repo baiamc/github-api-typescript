@@ -1,6 +1,6 @@
 import fetch from "node-fetch";
 import Config from "./config.js";
-import GithubRepository from "./githubRepository.js";
+import GithubRepository from "./github/githubRepository.js";
 import Secrets from "./secrets.js";
 
 const body = { a: 1 };
