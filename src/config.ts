@@ -1,4 +1,11 @@
 import * as fs from "fs/promises";
+/**
+ * Config
+ *
+ * Class for managing configuration for the project.
+ * Hold settings that may need to be changed as part
+ * of ongoing operations or testing
+ */
 export default class Config {
   private _initialized: boolean;
 
@@ -24,10 +31,15 @@ export default class Config {
     this.checkInitialized();
     return this._apiBase;
   }
-  public set apiBase(v: string) {
+  private set apiBase(v: string) {
     this._apiBase = v;
   }
 
+  /**
+   * Initializes object from the config.json file.
+   * Must be called before any properties are accessed.
+   * @returns The current instance of the class
+   */
   public async initialize(): Promise<Config> {
     const fileData = await fs.readFile("config.json", { encoding: "utf8" });
     const configData = JSON.parse(fileData);

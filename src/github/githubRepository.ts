@@ -1,9 +1,14 @@
+import fetch from "node-fetch";
 import Config from "../config.js";
 import Secrets from "../secrets.js";
-import fetch, { RequestInit } from "node-fetch";
 import { PullRequestJson, RepoJson } from "./types.js";
 import PullRequest from "./pullRequest.js";
 
+/**
+ * GithubRepository
+ *
+ * Class for accessing Github data
+ */
 export default class GithubRepository {
   constructor(
     private readonly _secrets: Secrets,
@@ -27,10 +32,8 @@ export default class GithubRepository {
     return `${this.orgEndpoint()}/repos`;
   }
 
-  private prEndpoint(repo: string, number?: number) {
-    return `${this._config.apiBase}/repos/${
-      this._config.organization
-    }/${repo}/pulls${number ? "/" + number : ""}?state=all`;
+  private prEndpoint(repo: string) {
+    return `${this._config.apiBase}/repos/${this._config.organization}/${repo}/pulls?state=all`;
   }
 
   private async getRepos(): Promise<RepoJson[]> {

@@ -1,5 +1,12 @@
 import { PrState, PullRequestJson } from "./types";
 
+/**
+ * PullRequest
+ *
+ * Class to manage pull request data retrieved from Github.
+ * Parses data as needed from original JSON and ensures
+ * that modifications to the data aren't made later.
+ */
 export default class PullRequest {
   /**
    * Accepts JSON data to build class
